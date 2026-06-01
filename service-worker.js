@@ -1,4 +1,4 @@
-const CACHE_NAME = "kennedytech-v3.1.2";
+const CACHE_NAME = "kennedytech-v3.1.3";
 
 const FILES = [
   "/",

@@ -428,6 +428,104 @@
         footer p {
             margin: 5px 0;
         }
+
+        @media (max-width: 768px) {
+
+    /* ===== GLOBAL ===== */
+    body {
+        overflow-x: hidden;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 15px;
+        padding: 15px;
+    }
+
+    header nav ul {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+        height: auto;
+        padding: 60px 20px;
+    }
+
+    .hero h1 {
+        font-size: 26px;
+    }
+
+    .hero p {
+        font-size: 15px;
+    }
+
+    /* ===== SERVICES ===== */
+    .services {
+        padding: 50px 20px;
+    }
+
+    .services h2 {
+        font-size: 26px;
+    }
+
+    .service-card {
+        text-align: center;
+    }
+
+    /* ===== ABOUT ===== */
+    .a-propos {
+        padding: 50px 20px;
+    }
+
+    .a-propos h2 {
+        font-size: 26px;
+    }
+
+    .points-forts {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .point-item {
+        width: 100%;
+    }
+
+    /* ===== CONTACT ===== */
+    .contact {
+        padding: 50px 20px;
+    }
+
+    .contact-container {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .contact-form {
+        padding: 25px;
+    }
+
+    /* inputs plus confortables sur mobile */
+    .contact-form input,
+    .contact-form textarea,
+    .contact-form select {
+        font-size: 16px;
+    }
+
+    .btn-submit {
+        font-size: 15px;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+        font-size: 12px;
+        padding: 25px 10px;
+    }
+}
     </style>
 </head>
 <body>
