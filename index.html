@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kennedy Tech - Maintenance & Réparation Multimédia</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#00d2ff">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+   <style>
+        /* ==========================================================================
+           1. VARIABLES & RESET
+           ========================================================================== */
+        :root {
+            --bg-dark: #121214;       /* Fond principal anthracite */
+            --bg-card: #1a1a1e;       /* Fond des cartes */
+            --accent: #00d2ff;        /* Bleu électrique (couleur flashy tech) */
+            --text-light: #ffffff;    /* Texte principal */
+            --text-muted: #a0a0a5;    /* Texte secondaire gris */
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth; 
+            font-family: var(--font-main);
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+        }
+
+        body {
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ==========================================================================
+           2. BARRE DE NAVIGATION (FLEXBOX)
+           ========================================================================== */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background-color: rgba(26, 26, 30, 0.95);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #2a2a30;
+        }
+
+        header .logo {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        header .logo span {
+            color: var(--accent); 
+        }
+
+        header nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        header nav ul a {
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        header nav ul a:hover {
+            color: var(--accent);
+        }
+
+        /* ==========================================================================
+           3. SECTION HERO (ACCUEIL)
+           ========================================================================== */
+        .hero {
+            height: 80vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            background: radial-gradient(circle at center, #1e293b 0%, var(--bg-dark) 70%);
+        }
+
+        .hero-content {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .hero h1 {
+            font-size: clamp(28px, 5vw, 48px); 
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+
+        .btn-cta {
+            background-color: var(--accent);
+            color: #000000;
+            padding: 14px 28px;
+            font-weight: bold;
+            border-radius: 6px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 210, 255, 0.3);
+        }
+
+        /* ==========================================================================
+           4. SECTION SERVICES (CSS GRID)
+           ========================================================================== */
+        .services {
+            padding: 80px 8%;
+            text-align: center;
+        }
+
+        .services h2 {
+            font-size: 36px;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .services h2::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background-color: var(--accent);
+            margin: 10px auto 0 auto;
+            border-radius: 2px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background-color: var(--bg-card);
+            padding: 40px 30px;
+            border-radius: 12px;
+            border: 1px solid #252529;
+            text-align: left;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .service-card .icon {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        .service-card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .service-card p {
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+        }
+
+        /* ==========================================================================
+           4.5 SECTION À PROPOS
+           ========================================================================== */
+        .a-propos {
+            padding: 80px 8%;
+            background-color: var(--bg-card); 
+            border-top: 1px solid #252529;
+            border-bottom: 1px solid #252529;
+            text-align: center;
+        }
+
+        .a-propos-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .a-propos h2 {
+            font-size: 36px;
+            margin-bottom: 30px;
+        }
+
+        .a-propos h2::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background-color: var(--accent);
+            margin: 10px auto 0 auto;
+            border-radius: 2px;
+        }
+
+        .a-propos p {
+            color: var(--text-muted);
+            font-size: 17px;
+            max-width: 750px;
+            margin: 0 auto 20px auto;
+            line-height: 1.8;
+        }
+
+        .points-forts {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 50px;
+            flex-wrap: wrap; 
+        }
+
+        .point-item {
+            background-color: var(--bg-dark);
+            padding: 30px 20px;
+            border-radius: 8px;
+            border: 1px solid #252529;
+            flex: 1;
+            min-width: 250px; 
+            transition: transform 0.3s ease;
+        }
+
+        .point-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .point-item span {
+            font-size: 35px;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .point-item h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: var(--text-light);
+        }
+
+        .point-item p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        /* ==========================================================================
+           5. SECTION CONTACT
+           ========================================================================== */
+        .contact {
+            padding: 80px 8%;
+            background-color: var(--bg-card); /* Passé en bg-card pour une alternance de couleur fluide */
+            border-top: 1px solid #252529;
+            text-align: center;
+        }
+
+        .contact h2 {
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+
+        .contact h2::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background-color: var(--accent);
+            margin: 10px auto 0 auto;
+            border-radius: 2px;
+        }
+
+        .contact-subtitle {
+            color: var(--text-muted);
+            margin-bottom: 50px;
+            font-size: 16px;
+        }
+
+        .contact-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 50px;
+            max-width: 1100px;
+            margin: 0 auto;
+            text-align: left;
+            flex-wrap: wrap; 
+        }
+
+        .contact-info {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background-color: var(--bg-dark);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #252529;
+        }
+
+        .info-icon {
+            font-size: 30px;
+        }
+
+        .info-item h3 {
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+
+        .info-item p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .contact-form {
+            flex: 1.2;
+            min-width: 300px;
+            background-color: var(--bg-dark);
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid #252529;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .contact-form label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: var(--text-light);
+        }
+
+        .contact-form input, 
+        .contact-form textarea,
+        .contact-form select {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: var(--bg-card);
+            border: 1px solid #252529;
+            border-radius: 6px;
+            color: var(--text-light);
+            font-family: var(--font-main);
+            font-size: 15px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .contact-form input:focus, 
+        .contact-form textarea:focus,
+        .contact-form select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 8px rgba(0, 210, 255, 0.2);
+        }
+
+        .btn-submit {
+            width: 100%;
+            background-color: var(--accent);
+            color: #000000;
+            padding: 14px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        /* ==========================================================================
+           6. PIED DE PAGE (FOOTER)
+           ========================================================================== */
+        footer {
+            background-color: #0a0a0c;
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 1px solid #1a1a1e;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        footer p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Kennedy<span>Tech</span></div>
+        <nav>
+            <ul>
+                <li><a href="#accueil">Accueil</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#a-propos">À Propos</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="accueil" class="hero">
+        <div class="hero-content">
+            <h1>Expert en Réparation Informatique & Mobile</h1>
+            <p>Un problème avec votre PC ou votre smartphone ? Diagnostic précis, maintenance matérielle et réinstallation complète du système.</p>
+            <a href="#contact" class="btn-cta">Demander un devis express</a>
+        </div>
+    </section>
+
+     <section id="services" class="services">
+        <h2>Nos Services & Spécialités</h2>
+        <div class="service-grid">
+    <!-- Carte Mobile -->
+<a href="mobile.html" style="text-decoration: none;">
+    <div class="service-card" style="text-align: center; cursor: pointer;">
+        <div class="icon">📱</div>
+        <h3 style="color: var(--accent);">Réparation Mobile</h3>
+        <p>Cliquez pour voir nos prix</p>
+        <!-- ... reste du contenu ... -->
+    </div>
+</a>
+
+<!-- Carte PC -->
+<a href="pc.html" style="text-collapsed: none;">
+    <div class="service-card" style="text-align: center; cursor: pointer;">
+        <div class="icon">💻</div>
+        <h3 style="color: var(--accent);">Réparation PC</h3>
+        <p>Cliquez pour voir nos prix</p>
+        <!-- ... reste du contenu ... -->
+    </div>
+</a>
+        </div>
+     </section>
+
+    <section id="a-propos" class="a-propos">
+        <div class="a-propos-container">
+            <h2>À Propos de Moi</h2>
+            <p>Passionné par l'univers de la tech et de l'architecture informatique, j'associe mes compétences théoriques en développement de systèmes à une solide expertise pratique sur le terrain.</p>
+            <p>Mon objectif est de proposer un service de maintenance informatique et mobile irréprochable. Du simple bug logiciel à la panne de carte mère nécessitant de la micro-soudure, chaque problème a sa solution technique.</p>
+            
+            <div class="points-forts">
+                <div class="point-item">
+                    <span>⚡</span>
+                    <h3>Diagnostic Rapide</h3>
+                    <p>Identification de la panne en un temps record.</p>
+                </div>
+                <div class="point-item">
+                    <span>🔬</span>
+                    <h3>Haute Précision</h3>
+                    <p>Soin méticuleux apporté à chaque composant hardware.</p>
+                </div>
+                <div class="point-item">
+                    <span>🤝</span>
+                    <h3>Fiabilité</h3>
+                    <p>Des installations propres, sécurisées et durables.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <h2>Contactez-Moi</h2>
+        <p class="contact-subtitle">Une question ? Un appareil en panne ? Envoyez un message pour un devis gratuit.</p>
+
+        <div class="contact-container">
+            <div class="contact-info">
+                <div class="info-item">
+                    <span class="info-icon">📍</span>
+                    <div>
+                        <h3>Localisation</h3>
+                        <p>Kinshasa, RDC</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">📞</span>
+                    <div>
+                        <h3>Téléphone / WhatsApp</h3>
+                        <p>+243 844 553 167</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">✉️</span>
+                    <div>
+                        <h3>Email Pro</h3>
+                        <p>kennedylamala01@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+
+            <form class="contact-form" onsubmit="sendToWhatsapp(event)">
+                <div class="form-group">
+                    <label for="name">Nom complet</label>
+                    <input type="text" id="name" placeholder="Votre nom" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Adresse Email</label>
+                    <input type="email" id="email" placeholder="votre@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="device">Type d'appareil concerné</label>
+                    <select id="device" required>
+                        <option value="" disabled selected>Choisissez une option...</option>
+                        <option value="Ordinateur / PC">💻 Ordinateur / PC</option>
+                        <option value="Téléphone / Smartphone">📱 Téléphone / Smartphone</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Votre Message</label>
+                    <textarea id="message" rows="5" placeholder="Expliquez votre problème technique ici (Modèle de l'appareil, symptômes...)" required></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">Envoyer le message</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 KennedyTech - Tous droits réservés.</p>
+        <p>Kinshasa, DRC | Solutions techniques de confiance</p>
+    <a href="https://facebook.com/Kennedy Lamala" target="_blank" aria-label="Facebook">
+        <i class="fab fa-facebook"></i>
+    </a>
+
+    <a href="https://instagram.com/kennedy_lamala_2.0" target="_blank" aria-label="Instagram">
+        <i class="fab fa-instagram"></i>
+    </a>
+
+    <a href="mailto:kennedylamala01@gmail.com" aria-label="Email">
+        <i class="fas fa-envelope"></i>
+    </a>
+    </footer>
+
+<script>
+function sendToWhatsapp(event) {
+    event.preventDefault();
+
+    const nom = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const appareil = document.getElementById('device').value;
+    const message = document.getElementById('message').value;
+
+    const monNumero = "243844553167";
+
+    const messageFinal =
+        `*Nouveau message de KennedyTech*\n\n` +
+        `👤 Client : ${nom}\n` +
+        `✉️ Email : ${email}\n` +
+        `📱 Appareil : ${appareil}\n\n` +
+        `🛠️ Problème :\n${message}`;
+
+    const url = `https://api.whatsapp.com/send?phone=${monNumero}&text=${encodeURIComponent(messageFinal)}`;
+
+    window.open(url, "_blank");
+}
+
+/* =======================
+   SERVICE WORKER COMPLET
+======================= */
+
+if ("serviceWorker" in navigator) {
+
+    navigator.serviceWorker.register("./service-worker.js", { updateViaCache: "none" })
+    .then(reg => {
+
+        // FORCER LA RECHERCHE DE MISE À JOUR
+        setInterval(() => reg.update(), 5000);
+
+        reg.addEventListener("updatefound", () => {
+
+            const newWorker = reg.installing;
+
+            newWorker.addEventListener("statechange", () => {
+
+                if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+
+                    const box = document.createElement("div");
+                    box.innerHTML = `
+                        <div style="
+                            position:fixed;
+                            bottom:20px;
+                            left:50%;
+                            transform:translateX(-50%);
+                            background:#111;
+                            color:white;
+                            padding:15px;
+                            border-radius:10px;
+                            z-index:9999;
+                        ">
+                            Nouvelle version disponible<br><br>
+                            <button id="updateBtn" style="padding:8px 15px;">
+                                Mettre à jour
+                            </button>
+                        </div>
+                    `;
+
+                    document.body.appendChild(box);
+
+                    document.getElementById("updateBtn").onclick = () => {
+                        newWorker.postMessage({ action: "skipWaiting" });
+                    };
+                }
+            });
+        });
+    });
+
+    // RECHARGE AUTOMATIQUE APRÈS UPDATE
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+        window.location.reload();
+    });
+
+    setTimeout(() => {
+        alert("actif");
+    }, 3000);
+}
+</script>
+</body>
+</html>
