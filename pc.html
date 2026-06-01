@@ -4,11 +4,63 @@
     <meta charset="UTF-8">
     <title>Tarifs - KennedyTech</title>
     <style>
-        body { background-color: #121214; color: white; font-family: sans-serif; padding: 40px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #1a1a1e; }
-        th, td { padding: 15px; border: 1px solid #252529; text-align: left; }
-        th { color: #00d2ff; }
-        .back-btn { display: inline-block; margin-bottom: 20px; color: #00d2ff; }
+        body {
+    background-color: #121214;
+    color: white;
+    font-family: sans-serif;
+    padding: 40px;
+    margin: 0;
+}
+
+/* lien retour */
+.back-btn {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #00d2ff;
+    font-size: 16px;
+}
+
+/* TABLEAU PC */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: #1a1a1e;
+    overflow-x: auto;
+}
+
+th, td {
+    padding: 15px;
+    border: 1px solid #252529;
+    text-align: left;
+}
+
+th {
+    color: #00d2ff;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+
+    body {
+        padding: 15px;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    th, td {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .back-btn {
+        font-size: 14px;
+    }
+}
     </style>
 </head>
 <body>
