@@ -665,7 +665,7 @@
         <h2 style="font-size: 36px; margin-bottom: 30px; color: white;">Ce qu'ils disent de nous</h2>
         
         <div id="review-form" style="max-width: 400px; margin: auto; display: flex; flex-direction: column; gap: 10px;">
-            <input type="text" id="name" placeholder="Votre nom" style="padding: 10px; border-radius: 6px; background: #1a1a1e; border: 1px solid #333; color: white;">
+            <input type="text" id="review-name" placeholder="Votre nom" style="padding: 10px; border-radius: 6px; background: #1a1a1e; border: 1px solid #333; color: white;">
             <div class="stars" id="star-container" style="font-size: 25px; cursor: pointer; color: #555;">
                 <span onclick="setStars(1)">★</span>
                 <span onclick="setStars(2)">★</span>
@@ -673,7 +673,7 @@
                 <span onclick="setStars(4)">★</span>
                 <span onclick="setStars(5)">★</span>
             </div>
-            <textarea id="comment" placeholder="Votre avis" style="padding: 10px; border-radius: 6px; background: #1a1a1e; border: 1px solid #333; color: white;"></textarea>
+            <textarea id="review-comment" placeholder="Votre avis" style="padding: 10px; border-radius: 6px; background: #1a1a1e; border: 1px solid #333; color: white;"></textarea>
             <button onclick="addReview()" style="padding: 10px; background: #00d2ff; border: none; cursor: pointer; font-weight: bold; border-radius: 6px;">Envoyer mon avis</button>
         </div>
 
@@ -697,95 +697,22 @@
         <i class="fas fa-envelope"></i>
     </a>
     </footer>
-
 <script type="module">
-    // AJOUTE CETTE LIGNE POUR QUE LE BOUTON CONTACT FONCTIONNE
-    window.sendToWhatsapp = sendToWhatsapp;
 
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    // ... reste de tes imports ...
-    
-function sendToWhatsapp(event) {
-    event.preventDefault();
+/* ==========================
+   FIREBASE
+========================== */
 
-    const nom = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const appareil = document.getElementById('device').value;
-    const message = document.getElementById('message').value;
-
-    const monNumero = "243844553167";
-
-    const messageFinal =
-        `*Nouveau message de KennedyTech*\n\n` +
-        `👤 Client : ${nom}\n` +
-        `✉️ Email : ${email}\n` +
-        `📱 Appareil : ${appareil}\n\n` +
-        `🛠️ Problème :\n${message}`;
-
-    const url = `https://api.whatsapp.com/send?phone=${monNumero}&text=${encodeURIComponent(messageFinal)}`;
-
-    window.open(url, "_blank");
-}
-
-/* =======================
-   SERVICE WORKER COMPLET
-======================= */
-
-if ("serviceWorker" in navigator) {
-
-    navigator.serviceWorker.register("./service-worker.js", { updateViaCache: "none" })
-    .then(reg => {
-
-        // FORCER LA RECHERCHE DE MISE À JOUR
-        setInterval(() => reg.update(), 5000);
-
-        reg.addEventListener("updatefound", () => {
-
-            const newWorker = reg.installing;
-
-            newWorker.addEventListener("statechange", () => {
-
-                if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
-
-                    const box = document.createElement("div");
-                    box.innerHTML = `
-                        <div style="
-                            position:fixed;
-                            bottom:20px;
-                            left:50%;
-                            transform:translateX(-50%);
-                            background:#111;
-                            color:white;
-                            padding:15px;
-                            border-radius:10px;
-                            z-index:9999;
-                        ">
-                            Nouvelle version disponible<br><br>
-                            <button id="updateBtn" style="padding:8px 15px;">
-                                Mettre à jour
-                            </button>
-                        </div>
-                    `;
-
-                    document.body.appendChild(box);
-
-                    document.getElementById("updateBtn").onclick = () => {
-                        newWorker.postMessage({ action: "skipWaiting" });
-                    };
-                }
-            });
-        });
-    });
-
-    // RECHARGE AUTOMATIQUE APRÈS UPDATE
-    navigator.serviceWorker.addEventListener("controllerchange", () => {
-        window.location.reload();
-    });
-}
-
-// --- FIREBASE AVIS ---
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+import {
+    getFirestore,
+    collection,
+    addDoc,
+    query,
+    orderBy,
+    onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyD2PVq-MgtPhaGI5RxIvlsAasiy4V4kIlU",
@@ -799,41 +726,276 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+
+/* ==========================
+   WHATSAPP CONTACT
+========================== */
+
+function sendToWhatsapp(event) {
+
+    event.preventDefault();
+
+    const nom = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const appareil = document.getElementById("device").value;
+    const message = document.getElementById("message").value;
+
+    const monNumero = "243844553167";
+
+    const texte =
+`*Nouveau message KennedyTech*
+
+👤 Client : ${nom}
+✉️ Email : ${email}
+📱 Appareil : ${appareil}
+
+🛠️ Problème :
+${message}`;
+
+    const url =
+        `https://api.whatsapp.com/send?phone=${monNumero}&text=${encodeURIComponent(texte)}`;
+
+    window.open(url, "_blank");
+}
+
+
+/* ==========================
+   SERVICE WORKER
+========================== */
+
+if ("serviceWorker" in navigator) {
+
+    navigator.serviceWorker
+    .register("./service-worker.js", {
+        updateViaCache: "none"
+    })
+
+    .then((reg) => {
+
+        setInterval(() => {
+            reg.update();
+        }, 5000);
+
+        reg.addEventListener("updatefound", () => {
+
+            const newWorker = reg.installing;
+
+            if (!newWorker) return;
+
+            newWorker.addEventListener("statechange", () => {
+
+                if (
+                    newWorker.state === "installed" &&
+                    navigator.serviceWorker.controller
+                ) {
+
+                    const box = document.createElement("div");
+
+                    box.innerHTML = `
+                    <div id="updateBox"
+                    style="
+                    position:fixed;
+                    bottom:20px;
+                    left:50%;
+                    transform:translateX(-50%);
+                    background:#111;
+                    color:#fff;
+                    padding:15px;
+                    border-radius:10px;
+                    z-index:99999;
+                    text-align:center;
+                    box-shadow:0 0 10px rgba(0,0,0,.5);
+                    ">
+                        <p>🚀 Nouvelle version disponible</p>
+
+                        <button id="updateBtn"
+                        style="
+                        padding:8px 15px;
+                        border:none;
+                        border-radius:6px;
+                        cursor:pointer;
+                        ">
+                            Mettre à jour
+                        </button>
+                    </div>
+                    `;
+
+                    document.body.appendChild(box);
+
+                    document
+                    .getElementById("updateBtn")
+                    .addEventListener("click", () => {
+
+                        newWorker.postMessage({
+                            action: "skipWaiting"
+                        });
+
+                    });
+
+                }
+
+            });
+
+        });
+
+    });
+
+    navigator.serviceWorker.addEventListener(
+        "controllerchange",
+        () => {
+            window.location.reload();
+        }
+    );
+}
+
+
+/* ==========================
+   AVIS FIREBASE
+========================== */
+
 let selectedStars = 0;
 
-window.setStars = (n) => {
+function setStars(n) {
+
     selectedStars = n;
-    document.querySelectorAll("#star-container span").forEach((star, i) => {
-        star.classList.toggle("active", i < n);
-        star.style.color = i < n ? "#ffd700" : "#555";
+
+    document
+    .querySelectorAll("#star-container span")
+    .forEach((star, index) => {
+
+        star.classList.toggle(
+            "active",
+            index < n
+        );
+
+        star.style.color =
+            index < n
+            ? "#ffd700"
+            : "#555";
     });
-};
+}
 
-window.addReview = async () => {
-    const name = document.getElementById("name").value;
-    const comment = document.getElementById("comment").value;
-    if (!name || !comment || selectedStars === 0) return alert("Remplis tout et choisis des étoiles !");
-    
-    await addDoc(collection(db, "reviews"), { name, comment, stars: selectedStars, time: Date.now() });
-    alert("Merci pour ton avis !");
-    document.getElementById("name").value = "";
-    document.getElementById("comment").value = "";
-};
 
-const q = query(collection(db, "reviews"), orderBy("time", "desc"));
-onSnapshot(q, (snapshot) => {
-    const container = document.getElementById("reviewsList");
+async function addReview() {
+
+    const name =
+        document.getElementById("review-name").value;
+
+    const comment =
+        document.getElementById("review-comment").value;
+
+    if (
+        !name ||
+        !comment ||
+        selectedStars === 0
+    ) {
+
+        alert(
+            "Remplis tout et choisis des étoiles !"
+        );
+
+        return;
+    }
+
+    try {
+
+        await addDoc(
+            collection(db, "reviews"),
+            {
+                name,
+                comment,
+                stars: selectedStars,
+                time: Date.now()
+            }
+        );
+
+        alert("Merci pour ton avis ⭐");
+
+        document.getElementById("name").value = "";
+        document.getElementById("comment").value = "";
+
+        selectedStars = 0;
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Erreur lors de l'envoi de l'avis."
+        );
+    }
+}
+
+
+/* ==========================
+   AFFICHAGE DES AVIS
+========================== */
+
+const reviewsQuery = query(
+    collection(db, "reviews"),
+    orderBy("time", "desc")
+);
+
+onSnapshot(reviewsQuery, (snapshot) => {
+
+    const container =
+        document.getElementById("reviewsList");
+
+    if (!container) return;
+
     container.innerHTML = "";
-    snapshot.forEach(doc => {
+
+    snapshot.forEach((doc) => {
+
         const r = doc.data();
+
         container.innerHTML += `
-            <div style="background:#1a1a1e; padding:15px; border-radius:8px; border:1px solid #333; text-align:left;">
-                <p style="color:#ffd700; margin:0;">${'★'.repeat(r.stars)}</p>
-                <p style="margin:5px 0;">"${r.comment}"</p>
-                <h4 style="margin:0; font-size:14px; color:#aaa;">— ${r.name}</h4>
-            </div>`;
+        <div
+        style="
+        background:#1a1a1e;
+        padding:15px;
+        border-radius:10px;
+        border:1px solid #333;
+        margin-bottom:10px;
+        ">
+
+            <div
+            style="
+            color:#ffd700;
+            font-size:18px;
+            ">
+                ${"★".repeat(r.stars)}
+            </div>
+
+            <p style="margin:10px 0;">
+                "${r.comment}"
+            </p>
+
+            <h4
+            style="
+            color:#aaa;
+            font-size:14px;
+            margin:0;
+            ">
+                — ${r.name}
+            </h4>
+
+        </div>
+        `;
+
     });
+
 });
+
+
+/* ==========================
+   GLOBAL FUNCTIONS
+========================== */
+
+window.sendToWhatsapp = sendToWhatsapp;
+window.setStars = setStars;
+window.addReview = addReview;
+
 </script>
 </body>
 </html>
