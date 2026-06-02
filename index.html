@@ -660,6 +660,28 @@
         </div>
     </section>
 
+    <!-- SECTION AVIS -->
+    <section id="avis" style="padding: 80px 8%; background: #121214; text-align: center;">
+        <h2 style="font-size: 36px; margin-bottom: 30px; color: white;">Ce qu'ils disent de nous</h2>
+        
+        <div id="review-form" style="max-width: 400px; margin: auto; display: flex; flex-direction: column; gap: 10px;">
+            <input type="text" id="name" placeholder="Votre nom" style="padding: 10px; border-radius: 6px; background: #1a1a1e; border: 1px solid #333; color: white;">
+            <div class="stars" id="star-container" style="font-size: 25px; cursor: pointer; color: #555;">
+                <span onclick="setStars(1)">★</span>
+                <span onclick="setStars(2)">★</span>
+                <span onclick="setStars(3)">★</span>
+                <span onclick="setStars(4)">★</span>
+                <span onclick="setStars(5)">★</span>
+            </div>
+            <textarea id="comment" placeholder="Votre avis" style="padding: 10px; border-radius: 6px; background: #1a1a1e; border: 1px solid #333; color: white;"></textarea>
+            <button onclick="addReview()" style="padding: 10px; background: #00d2ff; border: none; cursor: pointer; font-weight: bold; border-radius: 6px;">Envoyer mon avis</button>
+        </div>
+
+        <div id="reviewsList" style="margin-top: 40px; display: flex; flex-direction: column; gap: 20px; max-width: 600px; margin-left: auto; margin-right: auto;">
+            <!-- Les avis apparaîtront ici -->
+        </div>
+    </section>
+
     <footer>
         <p>&copy; 2026 KennedyTech - Tous droits réservés.</p>
         <p>Kinshasa, DRC | Solutions techniques de confiance</p>
@@ -676,7 +698,13 @@
     </a>
     </footer>
 
-<script>
+<script type="module">
+    // AJOUTE CETTE LIGNE POUR QUE LE BOUTON CONTACT FONCTIONNE
+    window.sendToWhatsapp = sendToWhatsapp;
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    // ... reste de tes imports ...
+    
 function sendToWhatsapp(event) {
     event.preventDefault();
 
@@ -754,6 +782,58 @@ if ("serviceWorker" in navigator) {
         window.location.reload();
     });
 }
+
+// --- FIREBASE AVIS ---
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyD2PVq-MgtPhaGI5RxIvlsAasiy4V4kIlU",
+    authDomain: "kennedytech-52907.firebaseapp.com",
+    projectId: "kennedytech-52907",
+    storageBucket: "kennedytech-52907.firebasestorage.app",
+    messagingSenderId: "598239973672",
+    appId: "1:598239973672:web:578de092d7e07b79fec01d"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+let selectedStars = 0;
+
+window.setStars = (n) => {
+    selectedStars = n;
+    document.querySelectorAll("#star-container span").forEach((star, i) => {
+        star.classList.toggle("active", i < n);
+        star.style.color = i < n ? "#ffd700" : "#555";
+    });
+};
+
+window.addReview = async () => {
+    const name = document.getElementById("name").value;
+    const comment = document.getElementById("comment").value;
+    if (!name || !comment || selectedStars === 0) return alert("Remplis tout et choisis des étoiles !");
+    
+    await addDoc(collection(db, "reviews"), { name, comment, stars: selectedStars, time: Date.now() });
+    alert("Merci pour ton avis !");
+    document.getElementById("name").value = "";
+    document.getElementById("comment").value = "";
+};
+
+const q = query(collection(db, "reviews"), orderBy("time", "desc"));
+onSnapshot(q, (snapshot) => {
+    const container = document.getElementById("reviewsList");
+    container.innerHTML = "";
+    snapshot.forEach(doc => {
+        const r = doc.data();
+        container.innerHTML += `
+            <div style="background:#1a1a1e; padding:15px; border-radius:8px; border:1px solid #333; text-align:left;">
+                <p style="color:#ffd700; margin:0;">${'★'.repeat(r.stars)}</p>
+                <p style="margin:5px 0;">"${r.comment}"</p>
+                <h4 style="margin:0; font-size:14px; color:#aaa;">— ${r.name}</h4>
+            </div>`;
+    });
+});
 </script>
 </body>
 </html>
